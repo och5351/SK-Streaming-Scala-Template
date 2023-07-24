@@ -3,7 +3,7 @@ package org.company.ioc.model
 import org.apache.spark.sql.functions.{col, from_json}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.company.di.Processor
+import org.company.di.MicroBatchProcessor
 import org.company.di.model.ConfigModel
 import org.company.di.util.SchemaRegistry
 
@@ -76,7 +76,7 @@ class SparkModel {
    */
   def kafkaStreamingStarter(spark: DataFrame, sparkSession: SparkSession): Unit = {
 
-    val processor = new Processor
+    val microBatchprocessor = new MicroBatchProcessor
 
     val frequency = ConfigModel.SINK_FREQUENCY
 
@@ -85,7 +85,7 @@ class SparkModel {
       .trigger(Trigger.ProcessingTime(frequency))
       .outputMode("append")
       .foreachBatch((batchDF: DataFrame, batchId: Long) =>
-        processor.batch(batchDF, batchId, sparkSession)
+        microBatchprocessor.batch(batchDF, batchId, sparkSession)
       )
       .start()
       .awaitTermination()

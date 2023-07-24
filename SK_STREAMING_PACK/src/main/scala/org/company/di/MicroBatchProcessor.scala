@@ -3,7 +3,7 @@ package org.company.di
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.company.di.util.{Preprocessor, SchemaRegistry}
 
-class Processor {
+class MicroBatchProcessor {
   /**
    * 의존성 주입 메인 함수
    * @param df 카프카 배치로 consume 하는 데이터
